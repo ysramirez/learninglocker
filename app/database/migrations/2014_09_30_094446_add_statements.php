@@ -11,14 +11,16 @@ class AddStatements extends Migration {
 	 * @return void
 	 */
 	public function up() {
-		Schema::table('statements', function (Blueprint $table) {
-      $table->index('lrs._id');
-      $table->index(['lrs._id', 'statement.object.id']);
-      $table->index(['lrs._id', 'statement.verb.id']);
-      $table->index(['lrs._id', 'statement.actor.mbox']);
-      $table->index(['lrs._id', 'timestamp']);
-      $table->index(['statement.stored']);
-      $table->index(['statement.stored', 'lrs._id']);
+    $indexOptions = ['background'=>1, 'socketTimeoutMS'=>-1];
+
+		Schema::table('statements', function (Blueprint $table) use ($indexOptions) {
+      $table->index('lrs._id', $indexOptions);
+      $table->index(['lrs._id', 'statement.object.id'], $indexOptions);
+      $table->index(['lrs._id', 'statement.verb.id'], $indexOptions);
+      $table->index(['lrs._id', 'statement.actor.mbox'], $indexOptions);
+      $table->index(['lrs._id', 'timestamp'], $indexOptions);
+      $table->index(['statement.stored'], $indexOptions);
+      $table->index(['statement.stored', 'lrs._id'], $indexOptions);
 		});
 	}
 
@@ -28,8 +30,8 @@ class AddStatements extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
-		Schema::table('statements', function (Blueprint $table) {
+	public function down() {    
+		Schema::table('statements', function (Blueprint $table) use ($indexOptions) {
       $table->dropIndex('lrs._id');
 			$table->dropIndex(['lrs._id', 'statement.object.id']);
       $table->dropIndex(['lrs._id', 'statement.verb.id']);

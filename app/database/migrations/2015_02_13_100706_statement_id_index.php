@@ -6,8 +6,10 @@ use Illuminate\Database\Migrations\Migration;
 class StatementIdIndex extends Migration {
 
 	public function up() {
-		Schema::table('statements', function (Blueprint $table) {
-      $table->index(['statement.id', 'lrs._id']);
+    $indexOptions = ['background'=>1, 'socketTimeoutMS'=>-1];
+
+		Schema::table('statements', function (Blueprint $table) use ($indexOptions) {
+      $table->index(['statement.id', 'lrs._id'], $indexOptions);
     });
 	}
 
